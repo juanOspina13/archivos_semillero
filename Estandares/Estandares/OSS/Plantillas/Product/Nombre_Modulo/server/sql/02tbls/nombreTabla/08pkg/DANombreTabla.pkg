@@ -1,0 +1,241 @@
+CREATE OR REPLACE PACKAGE DA<NombreTabla>
+IS
+/***************************************************************
+Propiedad intelectual de Open International Systems (c).
+
+Unidad	     : <Nombre del Paquete>
+Descripcion	 : <Descripcion de la funcionalidad general del paquete>
+
+Parametro	    Descripcion
+============	==============================
+
+Historia de Modificaciones
+Fecha   	           Autor            Modificacion
+====================   =========        ====================
+DD-MM-YYYY             Autor<SAONNNN>   <Descripcion de la Modificacion>
+****************************************************************/
+
+	/* Cursor general para acceso por Llave Primaria */
+	CURSOR cuRecord
+	(
+		Parametro1  in <NombreTabla>.<NombreCampo1>%type,
+		Parametro2  in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+		ParametroN  in <NombreTabla>.<NombreCampoN>%type
+	)
+	IS
+		SELECT <NombreTabla>.*,
+               <NombreTabla>.rowid
+		  FROM <NombreTabla>
+		 WHERE <NombreCampo1> = <Parametro1>
+           AND <NombreCampo2> = <Parametro2>
+                    .
+                    .
+                    .
+           AND <NombreCampoN> = <ParametroN>;
+
+
+	/* Cursor general para acceso por RowId */
+	CURSOR cuRecordByRowId
+	(
+		irirowid in varchar2
+	)
+	IS
+		SELECT <NombreTabla>.*,
+               <NombreTabla>.rowid
+		  FROM <NombreTabla>
+		 WHERE rowId = irirowid;
+
+
+	/* Subtipos */
+	subtype sty<NombreTabla>  is  cuRecord%rowtype;
+	type tyRefCursor is  REF CURSOR;
+
+	/*Tipos*/
+	type tytb<NombreTabla> is table of sty<NombreTabla> index by binary_integer;
+	type tyrfRecords is ref cursor return sty<NombreTabla>;
+
+	/* Tipos referenciando al registro */
+	type tytb<NombreCampo1> is table of <NombreTabla>.<NombreCampo1>%type index by binary_integer;
+	type tytb<NombreCampo2> is table of <NombreTabla>.<NombreCampo2>%type index by binary_integer;
+                .
+                .
+                .
+	type tytb<NombreCampoN> is table of <NombreTabla>.<NombreCampoN>%type index by binary_integer;
+	
+
+	type tyrc<NombreTabla> is record
+	(
+		<NombreCampo1>    tytb<NombreCampo1>,
+        <NombreCampo1>    tytb<NombreCampo1>,
+                .
+                .
+                .
+        <NombreCampo1>    tytb<NombreCampo1>
+	);
+
+
+	cnuTABLEPARAMETER constant number(10) := 3;
+
+	/**************************************
+     * Declaracion de Metodos Publicos
+     **************************************/
+
+	PROCEDURE <NombreProcedimiento>;
+    PROCEDURE <NombreProcedimiento>
+	(
+		parametro1 in <TipoDato>,
+        parametro2 in <TipoDato>,
+             .
+             .
+             .
+        parametroN in <TipoDato>
+	);
+
+	
+	FUNCTION <NombreFuncion>
+	return TipoDato;
+
+	FUNCTION <NombreFuncion>
+	(
+		parametro1 in <TipoDato>,
+        parametro2 in <TipoDato>,
+             .
+             .
+             .
+        parametroN in <TipoDato>
+	) RETURN <TipoDato>;
+
+
+END DA<NombreTabla>;
+/
+CREATE OR REPLACE PACKAGE BODY DA<NombreTabla>
+IS
+    /*constantes locales al paquete*/
+    cnuRECORD_NOT_EXIST         constant number(1) := 1;
+    cnuRECORD_ALREADY_EXIST     constant number(1) := 2;
+    cnuAPPTABLEBUSSY            constant number(4) := 6951;
+    cnuINS_PK_NULL              constant number(4):= 1682;
+    cnuRECORD_HAVE_CHILDREN     constant number(4):= -2292;
+
+	/* Cursor para bloqueo de un registro por llave primaria */
+	CURSOR cuLockRcByPk
+	(
+		Parametro1  in <NombreTabla>.<NombreCampo1>%type,
+		Parametro2  in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+		ParametroN  in <NombreTabla>.<NombreCampoN>%type
+	)
+	IS
+		SELECT <NombreTabla>.*,
+               <NombreTabla>.rowid
+		  FROM <NombreTabla>
+		 WHERE <NombreCampo1> = <Parametro1>
+           AND <NombreCampo2> = <Parametro2>
+                    .
+                    .
+                    .
+           AND <NombreCampoN> = <ParametroN>
+		   FOR UPDATE NOWAIT;
+
+	/* Cursor para bloqueo de un registro por rowid */
+	CURSOR cuLockRcbyRowId
+	(
+		irirowid in varchar2
+	)
+	IS
+		SELECT <NombreTabla>.*,
+               <NombreTabla>.rowid
+		  FROM <NombreTabla>
+		 WHERE rowId = irirowid
+		   FOR UPDATE NOWAIT;
+
+	/*Tipos*/
+	type tyrf<NombreTabla> is ref cursor;
+
+	/*Variables Globales*/
+	rcRecOfTab tyrc<NombreTabla>;
+
+	rcData cuRecord%rowtype;
+
+    blDAO_USE_CACHE    boolean := null;
+
+    /*****************************************************************
+     * Declaracion de PROCEDIMIENTOS y FUNCIONES privadas del paquete
+     *****************************************************************/
+     PROCEDURE <NombreProcedimiento>;
+     PROCEDURE <NombreProcedimiento>
+     (
+        Parametro1      in      <TipoDato>,
+        Parametro2      in      <TipoDato>,
+                .
+                .
+                .
+        ParametroN      in out  <TipoDato>
+     );
+     
+     
+     FUNCTION <NombreFuncion>
+     return <TipoDato>;
+     
+     FUNCTION <NombreFuncion>
+     (
+        Parametro1      in      <TipoDato>,
+        Parametro2      in      <TipoDato>,
+                .
+                .
+                .
+        ParametroN      in      <TipoDato>
+     ) return <TipoDato>;
+
+    /*****************************************************************
+     * Implementacion de PROCEDIMIENTOS y FUNCIONES publicas del paquete
+     *****************************************************************/
+     PROCEDURE <NombreProcedimiento>
+     IS
+     BEGIN
+        -- Logica
+     END <NombreProcedimiento>;
+     
+     PROCEDURE <NombreProcedimiento>
+     (
+        Parametro1      in      <TipoDato>,
+        Parametro2      in      <TipoDato>,
+                .
+                .
+                .
+        ParametroN      in out  <TipoDato>
+     )IS
+     BEGIN
+        -- Logica
+     END <NombreProcedimiento>;
+
+     FUNCTION <NombreFuncion>
+     return <TipoDato>
+     IS
+     BEGIN
+        -- Logica
+     END <NombreFuncion>;
+
+     FUNCTION <NombreFuncion>
+     (
+        Parametro1      in      <TipoDato>,
+        Parametro2      in      <TipoDato>,
+                .
+                .
+                .
+        ParametroN      in      <TipoDato>
+     ) return <TipoDato>
+     IS
+     BEGIN
+        -- Logica
+     END <NombreFuncion>;
+
+begin
+    -- Logica
+end DA<NombreTabla>;
+/

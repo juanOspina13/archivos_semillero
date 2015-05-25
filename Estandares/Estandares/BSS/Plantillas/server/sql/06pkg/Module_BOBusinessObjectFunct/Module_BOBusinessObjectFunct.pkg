@@ -1,0 +1,312 @@
+CREATE OR REPLACE PACKAGE Module_BOBusinessObjectFunct AS
+--{
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Package	: Module_BOBusinessObjectFunct (El nombre debe ser en ingles)
+    Descripción	: Descripción de la funcionalidad que realiza este paquete.
+
+    Autor	: Nombre del creador de este paquete.
+    Fecha	: DD-MM-YYYY (Fecha Creación Paquete)  SAO (No Orden de Producción.)
+
+    Historia de Modificaciones
+
+    DD-MM-YYYY    <Autor>.SAONNNNN        Modificación
+    -----------  -------------------    -------------------------------------
+
+    ******************************************************************/
+
+
+    -------------------------------------------------------------------- 
+    -- Constantes
+    -------------------------------------------------------------------- 
+    --------------------------------------------------------------------
+    -- Variables
+    -------------------------------------------------------------------- 
+    -------------------------------------------------------------------- 
+    -- Cursores
+    -------------------------------------------------------------------- 
+    -----------------------------------
+    -- Metodos publicos del package
+    -----------------------------------
+
+    -- Obtiene la Version actual del Paquete
+    FUNCTION fsbVersion  return varchar2;
+
+--}
+END Module_BOBusinessObjectFunct;
+/
+CREATE OR REPLACE PACKAGE BODY Module_BOBusinessObjectFunct AS
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Package	: Module_BOBusinessObjectFunct (El nombre debe ser en ingles)
+    Descripción	: Descripción de la funcionalidad que realiza este paquete.
+
+    Autor	: Nombre del creador de este paquete.
+    Fecha	: DD-MM-YYYY (Fecha Creación Paquete)  SAO (No Orden de Producción.)
+
+    Historia de Modificaciones
+
+    DD-MM-YYYY    <Autor>.SAONNNNN        Modificación
+    -----------  -------------------    -------------------------------------
+
+    ******************************************************************/
+
+    -----------------------
+    -- Constants
+    -----------------------
+    -- Constante con el SAO de la ultima version aplicada
+    csbVERSION CONSTANT VARCHAR2(10) := 'SAOXXXXX';
+    
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Procedure	: fsbVersion
+    Descripcion	:
+    
+    Parametros	:	Descripcion
+    Retorno     :
+    	csbVersion        Version del Paquete
+
+    Autor	   :
+    Fecha	   :
+
+    Historia de Modificaciones
+    Fecha	ID Entrega
+    Modificación
+
+    02-06-2009
+    Creación
+    *****************************************************************/
+    FUNCTION fsbVersion
+    RETURN varchar2
+    IS
+    BEGIN
+    --{
+        pkErrors.Push('Module_BOBusinessObjectFunct.fsbVersion');
+
+        pkErrors.Pop;
+        -- Retorna el SAO con que se realizo la ultima entrega
+        RETURN (csbVersion);
+    EXCEPTION
+        WHEN LOGIN_DENIED THEN
+        	pkErrors.Pop;
+        	RAISE LOGIN_DENIED;
+        WHEN pkConstante.exERROR_LEVEL2 THEN
+        	pkErrors.Pop;
+        	RAISE pkConstante.exERROR_LEVEL2;
+        WHEN OTHERS THEN
+        	pkErrors.NotifyError( pkErrors.fsbLastObject, sqlerrm, sbErrMsg );
+        	pkErrors.Pop;
+        	raise_application_error( pkConstante.nuERROR_LEVEL2, sbErrMsg );
+    --}
+    END fsbVersion;
+    
+
+
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Procedure	: GetParameters
+		  English Description
+    Descripcion	: Descripcion
+
+    Parametros	:	Descripcion
+
+    Retorno     :
+
+    Autor	: <Nombre Apellido del Autor>
+    Fecha	: <DD-MM-YYYY>
+
+    Historia de Modificaciones
+    Fecha	   IDEntrega
+
+    DD-MM-YYYY    <Autor>SAONNNNN
+    Modificacion
+    *****************************************************************/
+
+    PROCEDURE GetParameters
+    IS
+
+    BEGIN
+    --{
+
+        pkErrors.push ('Module_BOBusinessObjectFunct.GetParameters');
+
+        -- Evalua si fueron cargados los parametros anteriormente
+        if ( blIsLoaded ) then
+        --{
+    	pkErrors.pop;
+    	return ;
+        --}
+        end if ;
+
+        -- Se fija cache de parametros
+        pkGrlParamExtendedMgr.SetCacheOn ;
+
+        -- Se validan parametros alfanumericos
+        sbVar := pkGeneralParametersMgr.fsbGetStringValue ( ... );
+
+        -- Se validan parametros numericos
+        nuVar := pkGeneralParametersMgr.fnuGetNumberValue ( ... );
+
+        -- Fija que ya fueron cargados los parametros
+        blIsLoaded := TRUE ;
+
+        pkErrors.pop;
+
+    EXCEPTION
+        when LOGIN_DENIED then
+    	blIsLoaded := FALSE ;
+    	pkErrors.pop;
+    	raise LOGIN_DENIED;
+
+        when pkConstante.exERROR_LEVEL2 then
+    	blIsLoaded := FALSE ;
+    	pkErrors.pop;
+    	raise pkConstante.exERROR_LEVEL2;
+
+        when OTHERS then
+    	blIsLoaded := FALSE ;
+    	pkErrors.NotifyError(pkErrors.fsbLastObject, sqlerrm, sbErrMsg);
+    	pkErrors.pop;
+    	raise_application_error(pkConstante.nuERROR_LEVEL2,sbErrMsg);
+    --}
+    END GetParameters;
+
+
+
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Procedure	: RunProcess
+		  English Description
+    Descripcion	: Descripcion
+
+    Parametros	:	Descripcion
+	IOVar1	    Descripcion 1
+	IOVar2	    Descripcion 2
+	IOVarN	    Descripcion N
+
+    Retorno     :
+
+    Autor	: <Nombre Apellido del Autor>
+    Fecha	: <DD-MM-YYYY>
+
+    Historia de Modificaciones
+    Fecha	   IDEntrega
+
+    DD-MM-YYYY    <Autor>SAONNNNN
+    Modificacion
+    *****************************************************************/
+
+    PROCEDURE RunProcess
+    (
+    	IVar1		    in    definicion,
+    	IVar2		    in    definicion,
+    	IVarN		    in    definicion
+    )
+    IS
+    BEGIN
+    --{
+
+        pkErrors.push ('Module_BOBusinessObjectFunct.RunProcess');
+
+        -- Obtiene los parametros
+        GetParameters ( ) ;
+
+        -- Ejecuta proceso
+        Process ( ... );
+
+        pkErrors.pop;
+
+    EXCEPTION
+        when LOGIN_DENIED then
+    	pkErrors.pop;
+    	raise LOGIN_DENIED;
+
+        when pkConstante.exERROR_LEVEL2 then
+    	-- Error Oracle nivel dos
+    	pkErrors.pop;
+    	raise pkConstante.exERROR_LEVEL2;
+
+        when OTHERS then
+    	pkErrors.NotifyError(pkErrors.fsbLastObject, sqlerrm, sbErrMsg);
+    	pkErrors.pop;
+    	raise_application_error(pkConstante.nuERROR_LEVEL2,sbErrMsg);
+    --}
+    END RunProcess;
+
+
+    /*****************************************************************
+        Propiedad intelectual de Open International Systems. (c).
+
+        Procedure	: ProcedureName
+        Descripcion	:
+
+        Parametros	:	Descripcion
+        Retorno     :
+        	csbVersion        Version del Paquete
+
+        Autor	   :
+        Fecha	   :
+
+        Historia de Modificaciones
+        Fecha	ID Entrega
+        Modificación
+
+        02-06-2009
+        Creación
+    *****************************************************************/
+    PROCEDURE ProcedureName
+    (
+        param1          in/out    dataType,
+        param2          in/out    dataType,
+           .
+           .
+           .
+        paramn          in/out    dataType
+    )
+    IS
+    BEGIN
+        null;
+    END ProcedureName;
+
+    /*****************************************************************
+        Propiedad intelectual de Open International Systems. (c).
+
+        Procedure	: functionName
+        Descripcion	:
+
+        Parametros	:	Descripcion
+        Retorno     :
+        	csbVersion        Version del Paquete
+
+        Autor	   :
+        Fecha	   :
+
+        Historia de Modificaciones
+        Fecha	ID Entrega
+        Modificación
+
+        02-06-2009
+        Creación
+    *****************************************************************/
+    FUNCTION functionName
+    (
+        param1          in/out    dataType,
+        param2          in/out    dataType,
+           .
+           .
+           .
+        paramn          in/out    dataType
+    )
+    RETURN dataType
+    IS
+    BEGIN
+        null;
+    END functionName;
+    
+END Module_BOBusinessObjectFunct;
+/

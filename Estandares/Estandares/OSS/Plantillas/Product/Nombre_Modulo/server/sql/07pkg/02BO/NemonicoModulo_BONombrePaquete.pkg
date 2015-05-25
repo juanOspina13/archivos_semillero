@@ -1,0 +1,187 @@
+CREATE OR REPLACE PACKAGE <NemonicoModulo_BONombrePaquete>
+IS
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems (c).
+
+    Unidad         : <Nombre de la UNIDAD>
+    Descripcion    : <Descripcion Detallada de la funcionalidad de la unidad>
+    Autor          : <Nombre y Apellido del Autor>
+    Fecha          : <DD-MM-YYYY>
+
+    Metodos
+
+    Nombre         :
+    Parametros         Descripcion
+    ============	===================
+
+
+    Historia de Modificaciones
+    Fecha             Autor             Modificacion
+    =========         =========         ====================
+
+    ******************************************************************/
+
+    --------------------------------------------
+    -- Constantes GLOBALES Y PUBLICAS DEL PAQUETE
+    --------------------------------------------
+    NOMBRECONSTANTE1            TIPODATO := VALOR;
+    NOMBRECONSTANTE2            TIPODATO := VALOR;
+           .
+           .
+           .
+    NOMBRECONSTANTEN            TIPODATO := VALOR;
+
+    --------------------------------------------
+    -- Variables GLOBALES Y PUBLICAS DEL PAQUETE
+    --------------------------------------------
+    NOMBREVARIABLE1             TIPODATO;
+    NOMBREVARIABLE2             TIPODATO;
+           .
+           .
+           .
+    NOMBREVARIABLEN             TIPODATO;
+
+    --------------------------------------------
+    -- Funciones y Procedimientos PUBLICAS DEL PAQUETE
+    --------------------------------------------
+    PROCEDURE <NombreProcedimiento>;
+
+    FUNCTION <NombreProcedimiento>
+    return TIPODATO;
+    
+    FUNCTION FSBVERSION
+    RETURN VARCHAR2;
+    
+END <NemonicoModulo_BONombrePaquete>;
+/
+CREATE OR REPLACE PACKAGE <NemonicoModulo_BONombrePaquete>
+IS
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Package	: <GE_BODescripcionfuncionalidad>
+    Descripción	: Descripción de la funcionalidad que realiza este paquete.
+
+    Autor	: Nombre del creador de este paquete.
+    Fecha	: DD-MM-YYYY (Fecha Creación Paquete)  SAO (No Orden de Producción.)
+
+    Historia de Modificaciones
+
+    DD-MM-YYYY    <Autor>.SAONNNNN        Modificación
+    -----------  -------------------    -------------------------------------
+
+    ******************************************************************/
+
+    --------------------------------------------
+    -- Constantes VERSION DEL PAQUETE
+    --------------------------------------------
+    csbVERSION                  CONSTANT VARCHAR2(10) := 'SAOXXXXX';
+
+    --------------------------------------------
+    -- Constantes PRIVADAS DEL PAQUETE
+    --------------------------------------------
+    NOMBRECONSTANTE1            TIPODATO := VALOR;
+    NOMBRECONSTANTE2            TIPODATO := VALOR;
+           .
+           .
+           .
+    NOMBRECONSTANTEN            TIPODATO := VALOR;
+
+    --------------------------------------------
+    -- Variables PRIVADAS DEL PAQUETE
+    --------------------------------------------
+    NOMBREVARIABLE1             TIPODATO;
+    NOMBREVARIABLE2             TIPODATO;
+           .
+           .
+           .
+    NOMBREVARIABLEN             TIPODATO;
+
+    --------------------------------------------
+    -- Funciones y Procedimientos PRIVADAS DEL PAQUETE
+    --------------------------------------------
+
+    /**************************************************************
+    Propiedad intelectual de Open International Systems (c).
+    Unidad      :  Nombre del Procedimiento
+    Descripcion :  Breve descricion de lo que hace el procedimiento
+
+    Autor       :  <Nombre del desarrollador que creo el procedimiento>
+    Fecha       :  DD-MM-YYYY
+    Parametros  :  <Listado de parametros que recibe el procedimiento y
+                    breve descripcion de que es>
+
+                   parametro1       <Descripcion del parametro>
+                   parametro2       <Descripcion del parametro>
+                      .
+                      .
+                      .
+                   parametroN       <Descripcion del parametro>
+
+    Historia de Modificaciones
+    Fecha        Autor              Modificacion
+    =========    =========          ====================
+    DD-MM-YYYY   Autor<SAONNNN>     Descripcion de la modificacion
+    ***************************************************************/
+    PROCEDURE <NombreProcedimiento>
+    BEGIN
+        -- Proceso
+    END <NombreProcedimiento>;
+
+    /**************************************************************
+    Propiedad intelectual de Open International Systems (c).
+    Unidad      :  Nombre del Procedimiento
+    Descripcion :  Breve descricion de lo que hace el procedimiento
+
+    Autor       :  <Nombre del desarrollador que creo el procedimiento>
+    Fecha       :  DD-MM-YYYY
+    Parametros  :  <Listado de parametros que recibe el procedimiento y
+                    breve descripcion de que es>
+
+                   parametro1       <Descripcion del parametro>
+                   parametro2       <Descripcion del parametro>
+                      .
+                      .
+                      .
+                   parametroN       <Descripcion del parametro>
+
+    Historia de Modificaciones
+    Fecha        Autor              Modificacion
+    =========    =========          ====================
+    DD-MM-YYYY   Autor<SAONNNN>     Descripcion de la modificacion
+    ***************************************************************/
+    FUNCTION <NombreProcedimiento>
+    BEGIN
+        -- Proceso
+    END <NombreProcedimiento>;
+    
+    /**************************************************************
+    Propiedad intelectual de Open International Systems (c).
+    Unidad      :  Nombre del Procedimiento
+    Descripcion :  Breve descricion de lo que hace el procedimiento
+
+    Autor       :  <Nombre del desarrollador que creo el procedimiento>
+    Fecha       :  DD-MM-YYYY
+    Parametros  :  <Listado de parametros que recibe el procedimiento y
+                    breve descripcion de que es>
+
+                   parametro1       <Descripcion del parametro>
+                   parametro2       <Descripcion del parametro>
+                      .
+                      .
+                      .
+                   parametroN       <Descripcion del parametro>
+
+    Historia de Modificaciones
+    Fecha        Autor              Modificacion
+    =========    =========          ====================
+    DD-MM-YYYY   Autor<SAONNNN>     Descripcion de la modificacion
+    ***************************************************************/
+    FUNCTION FSBVERSION
+    RETURN VARCHAR2 IS
+    BEGIN
+        return CSBVERSION;
+    END FSBVERSION;
+
+END <NemonicoModulo_BONombrePaquete>;
+/

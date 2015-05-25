@@ -1,0 +1,266 @@
+create or replace package pktbl<NombreTabla> as
+/*****************************************************************
+    Propiedad intelectual de Open International Systems (c).
+    Package	:	pktbl<NombreTabla>
+    Descripcion	:	Package de nivel 1 para la Tabla CARGOS
+    Parametros	:		Descripcion
+    Retorno	:
+    Autor	:  Generador automatico
+    Fecha	:  DD-MM-YYYY
+    Historia de Modificaciones
+    Fecha	Autor	    Modificacion
+*****************************************************************/
+
+    /***********************************************
+    * Define colecciones de cada columna de la tabla
+    ***********************************************/
+    type ty<NombreColumna1> is  table of cargos.Cargcuco%type
+        index by binary_integer;
+    type ty<NombreColumna2> is  table of cargos.Cargcuco%type
+        index by binary_integer;
+        .
+        .
+        .
+    type ty<NombreColumnaN> is  table of cargos.Cargcuco%type
+        index by binary_integer;
+
+    /***********************************************
+    * Define registro de colecciones
+    ***********************************************/
+    type tytb<NombreTabla> is record
+        (
+            NombreColumna1     ty<NombreColumna1>,
+            NombreColumna2     ty<NombreColumna2>,
+                    .
+                    .
+                    .
+            NombreColumnaN     ty<NombreColumnaN>
+        );
+
+     /************************************************************
+     * Cursor para accesar la TABLA, la cantidad de parametros
+     * depende de la cantidad de campos que tenga la PRIMARY KEY
+     * de la tabla
+     ************************************************************/
+    cursor cu<NombreTabla>
+    (
+        parametro1 in <NombreTabla>.<NombreCampo1>%type,
+        parametro2 in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+        parametroN in <NombreTabla>.<NombreCampoN>%type
+    )   is
+    SELECT *
+      FROM <NombreTabla>
+     WHERE <NombreCampo1> = <parametro1>
+       AND <NombreCampo2> = <parametro2>
+                .
+                .
+                .
+       AND <NombreCampoN> = <parametroN>;
+
+     
+    /**********************
+    * METODOS DEL PAQUETE
+    **********************/
+    procedure InsRecord
+    (
+        ircRecord	in	<NombreTabla>%rowtype
+    ) ;
+    
+    procedure InsRecords
+    (
+        irctbRecord	in out nocopy tytb<NombreTabla>
+    ) ;
+
+    procedure ClearMemory ;
+
+    /****************************************************************
+    * la cantidada de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    procedure DelRecord
+    (
+        parametro1  in  <NombreTabla>.<NombreCampo1>%type,
+        parametro2  in  <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+        parametroN  in  <NombreTabla>.<NombreCampoN>%type
+    ) ;
+    
+    procedure UpRecord
+    (
+        ircRecord in <NombreTabla>%rowtype
+    ) ;
+
+    procedure DelRecords
+    (
+        parametro1  in out nocopy  ty<NombreCampo1>,
+        parametro2  in out nocopy  ty<NombreCampo2>,
+                .
+                .
+                .
+        parametroN  in out nocopy  ty<NombreCampoN>
+    ) ;
+
+    function fblExist
+    (
+        parametro1 in <NombreTabla>.<NombreCampo>%type,
+        inuCACHE in number default 1
+    ) return boolean;
+    
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    function frcGetRecord
+    (
+        parametro1 in <NombreTabla>.<NombreCampo1>%type,
+        parametro2 in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+        parametroN in <NombreTabla>.<NombreCampoN>%type,
+        inuCACHE in number default 1
+    ) return <NombreTabla>%rowtype;
+
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    procedure AccKey
+    (
+        parametro1 in <NombreTabla>.<NombreCampo1>%type,
+        parametro2 in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+        parametroN in <NombreTabla>.<NombreCampoN>%type,
+        inuCACHE in number default 1
+    ) ;
+    
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    function f<MnemonicoTipoDato>Get<NombreCampo1>
+    (
+        parametro1 in <NombreTabla>.<NombreCampo1>%type,
+        parametro2 in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+        parametroN in <NombreTabla>.<NombreCampoN>%type,
+        inuCACHE in number default 1
+    ) return <TipoDato>;
+
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    function f<MnemonicoTipoDato>Get<NombreCampo2>
+    (
+        parametro1 in <NombreTabla>.<NombreCampo1>%type,
+        parametro2 in <NombreTabla>.<NombreCampo2>%type,
+                .
+                .
+                .
+        parametroN in <NombreTabla>.<NombreCampoN>%type,
+        inuCACHE in number default 1
+    ) return <TipoDato>;
+END pktbl<NombreTabla>;
+/
+create or replace package body pktbl<NombreTabla> AS
+
+    -- Record Tabla Servsusc
+    rc<NombreTabla>         cu<NombreTabla>%rowtype;
+    -- Record nulo de la Tabla Servsusc
+    rcRecordNull            <NombreTabla>%rowtype;
+
+    -------------------------
+    -- PRIVATE METHODS
+    -------------------------
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    procedure Load
+    (
+        NombreColumna1  in  <NombreTabla>.<NombreColumna1>%type,
+        NombreColumna2  in  <NombreTabla>.<NombreColumna1>%type,
+                    .
+                    .
+                    .
+        NombreColumnaN  in  <NombreTabla>.<NombreColumna1>%type
+    ) ;
+    
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    procedure LoadRecord
+    (
+        NombreColumna1  in  <NombreTabla>.<NombreColumna1>%type,
+        NombreColumna2  in  <NombreTabla>.<NombreColumna1>%type,
+                    .
+                    .
+                    .
+        NombreColumnaN  in  <NombreTabla>.<NombreColumna1>%type
+    ) ;
+
+
+    /****************************************************************
+    * la cantidad de parametros depende de la cantidad de campos
+    * que tenga la PRIMARY KEY de la tabla
+    ****************************************************************/
+    function fblInMemory
+    (
+        NombreColumna1  in  <NombreTabla>.<NombreColumna1>%type,
+        NombreColumna2  in  <NombreTabla>.<NombreColumna1>%type,
+                    .
+                    .
+                    .
+        NombreColumnaN  in  <NombreTabla>.<NombreColumna1>%type
+    ) return boolean ;
+
+-----------------                                                                                                       
+-- CONSTANTES                                                                                                           
+-----------------                                                                                                       
+CACHE                      constant number := 1;   -- Buscar en Cache                                                   
+csbDIVISION                constant varchar2(20) := pkConstante.csbDIVISION;
+csbMODULE                  constant varchar2(20) := pkConstante.csbMOD_SAT;
+-- Versión del paquete (Número del SAO con el cual se realiza la entrega)
+csbVersion                 CONSTANT VARCHAR2(250) := 'SAONNNNN';
+
+
+/************************************************************
+ * Implementacion de PROCEDIMIENTOS yu FUNCIONES publicas y
+ * privadas del paquete
+ ************************************************************/
+
+/**********************************************************
+    Propiedad intelectual de Open International Systems (c).
+    Procedure	:	InsRecord
+    Descripcion	:	Adiciona registro a la Tabla
+    Parametros	:		Descripcion
+        ircRecord Registro de tipo Tabla
+    Retorno	:
+    Autor	:	Generador automatico
+    Fecha	:	12-SEP-05
+    Historia de Modificaciones
+    Fecha	Autor	    Modificacion
+**********************************************************/
+procedure InsRecord
+    (
+        ircRecord	in	cargos%rowtype
+    )
+    is
+BEGIN
+-- {
+    -- Logica
+-- }
+END InsRecord;
+END pktbl<NombreTabla>;
+/

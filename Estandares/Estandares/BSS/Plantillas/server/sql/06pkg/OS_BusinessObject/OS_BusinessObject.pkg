@@ -1,0 +1,275 @@
+CREATE OR REPLACE PACKAGE OS_BusinessObject AS
+--{
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Package	: OS_BusinessObject (El nombre debe ser en ingles)
+    Descripción	: Descripción de la funcionalidad que realiza este paquete.
+
+    Autor	: Nombre del creador de este paquete.
+    Fecha	: DD-MM-YYYY (Fecha Creación Paquete)  SAO (No Orden de Producción.)
+
+    Historia de Modificaciones
+
+    DD-MM-YYYY    <Autor>.SAONNNNN        Modificación
+    -----------  -------------------    -------------------------------------
+
+    ******************************************************************/
+
+    --------------------------------------------------------------------
+    -- Constantes
+    --------------------------------------------------------------------
+    --------------------------------------------------------------------
+    -- Variables
+    --------------------------------------------------------------------
+    --------------------------------------------------------------------
+    -- Cursores
+    --------------------------------------------------------------------
+    -----------------------------------
+    -- Metodos publicos del package
+    -----------------------------------
+
+    -- Obtiene la Version actual del Paquete
+    FUNCTION fsbVersion  return varchar2;
+
+    PROCEDURE Functionality
+    (
+	   OVar1		    in/out	definicion,
+	   IOVar2		    in/out	definicion,
+	   IOVarN		    in/out	definicion,
+	   onuErrorCode        out		errorlog.erlocodi%type,
+	   osbErrorMessage	    out		errorlog.erlomens%type
+    ) ;
+
+--}
+END OS_BusinessObject;
+/
+CREATE OR REPLACE PACKAGE BODY OS_BusinessObject AS
+--{
+    /*****************************************************************
+    Propiedad intelectual de Open International Systems. (c).
+
+    Package	: OS_BusinessObject (El nombre debe ser en ingles)
+    Descripción	: Descripción de la funcionalidad que realiza este paquete.
+
+    Autor	: Nombre del creador de este paquete.
+    Fecha	: DD-MM-YYYY (Fecha Creación Paquete)  SAO (No Orden de Producción.)
+
+    Historia de Modificaciones
+
+    DD-MM-YYYY    <Autor>.SAONNNNN        Modificación
+    -----------  -------------------    -------------------------------------
+
+    ******************************************************************/
+
+    --------------------------------------------------------------------
+    -- Constantes
+    --------------------------------------------------------------------
+    -- Constante con el SAO de la ultima version aplicada
+    csbVERSION CONSTANT VARCHAR2(10) := 'SAOXXXXX';
+    
+    --------------------------------------------------------------------
+    -- Variables
+    --------------------------------------------------------------------
+    --------------------------------------------------------------------
+    -- Cursores
+    --------------------------------------------------------------------
+    -----------------------------------
+    -- Metodos publicos del package
+    -----------------------------------
+
+
+/*
+    Propiedad intelectual de Open International Systems. (c).
+
+    Procedure	: fsbVersion
+		  English Description
+    Descripcion	: Obtiene el SAO que identifica la version asociada a la
+		  ultima entrega del paquete
+
+    Parametros	:	Descripcion
+
+    Retorno     :
+		csbVersion        Version del Paquete
+
+    Autor	: <Nombre Apellido del Autor>
+    Fecha	: <DD-MM-YYYY>
+
+    Historia de Modificaciones
+    Fecha	   IDEntrega
+
+    DD-MM-YYYY    <Autor>SAONNNNN
+    Modificacion
+*/
+
+    FUNCTION fsbVersion
+    RETURN varchar2
+    IS
+
+    BEGIN
+    --{
+
+        pkErrors.push ('OS_BusinessObject.fsbVersion');
+
+        pkErrors.pop;
+
+        -- Retorna el SAO con que se realizo la ultima entrega
+        return ( csbVersion );
+
+    EXCEPTION
+        when LOGIN_DENIED then
+    	pkErrors.pop;
+    	raise LOGIN_DENIED;
+
+        when pkConstante.exERROR_LEVEL2 then
+    	-- Error Oracle nivel dos
+    	pkErrors.pop;
+    	raise pkConstante.exERROR_LEVEL2;
+
+        when OTHERS then
+    	pkErrors.NotifyError(pkErrors.fsbLastObject, sqlerrm, sbErrMsg);
+    	pkErrors.pop;
+    	raise_application_error(pkConstante.nuERROR_LEVEL2,sbErrMsg);
+    --}
+    END fsbVersion;
+
+
+/*
+    Propiedad intelectual de Open International Systems. (c).
+
+    Procedure	: Functionality
+		  English Description
+    Descripcion	: Descripcion
+
+    Parametros	:	Descripcion
+	IOVar1	    Descripcion 1
+	IOVar2	    Descripcion 2
+	IOVarN	    Descripcion N
+    Retorno	:
+	onuErrorCode		Codigo del mensaje de Error Generado
+				0    - Proceso satisfactorio
+				<> 0 - Codigo del error
+	osbErrorMessage		Mensaje de Error
+
+    Autor	: <Nombre Apellido del Autor>
+    Fecha	: <DD-MM-YYYY>
+
+    Historia de Modificaciones
+    Fecha	   IDEntrega
+
+    DD-MM-YYYY    <Autor>SAONNNNN
+    Modificacion
+*/
+
+    PROCEDURE Functionality
+    (
+    	IOVar1		    in/out	definicion,
+    	IOVar2		    in/out	definicion,
+    	IOVarN		    in/out	definicion,
+    	onuErrorCode        out		errorlog.erlocodi%type,
+    	osbErrorMessage	    out		errorlog.erlomens%type
+    )
+    IS
+        --------------------------------------------------------------------
+        -- Constantes
+        --------------------------------------------------------------------
+        --------------------------------------------------------------------
+        -- Variables
+        --------------------------------------------------------------------
+        --------------------------------------------------------------------
+        -- Cursores
+        --------------------------------------------------------------------
+        /* ***************************************************************** */
+        /* ********              Metodos Encapsulados               ******** */
+        /* ***************************************************************** */
+
+        PROCEDURE Initialize is
+        BEGIN
+        --{
+
+        	pkErrors.Push('OS_BusinessObject.Functionality.Initialize');
+
+        	-- Inicializa variables de Error
+        	pkErrors.Initialize;
+
+        	onuErrorCode 	:= pkConstante.EXITO;
+        	osbErrorMessage	:= pkConstante.NULLSB;
+
+        	pkErrors.Pop;
+
+        EXCEPTION
+    	when LOGIN_DENIED or pkConstante.exERROR_LEVEL2 then
+    	    pkErrors.Pop;
+    	    raise;
+    	when others then
+    	    pkErrors.NotifyError( pkErrors.fsbLastObject, sqlerrm, sbErrMsg );
+    	    pkErrors.Pop;
+    	    raise_application_error( pkConstante.nuERROR_LEVEL2, sbErrMsg );
+        --}
+        END Initialize;
+
+        /* -------------------------------------------------------------- */
+
+        PROCEDURE ClearMemory IS
+        BEGIN
+        --{
+
+        	pkErrors.Push('OS_BusinessObject.Functionality.ClearMemory');
+
+        	-- Limpia toda la memoria cache
+        	pktblTabla.ClearMemory;
+
+        	pkErrors.Pop;
+
+        EXCEPTION
+        	when LOGIN_DENIED or pkConstante.exERROR_LEVEL2 then
+        	    pkErrors.Pop;
+        	    raise;
+        	when others then
+        	    pkErrors.NotifyError( pkErrors.fsbLastObject, sqlerrm, sbErrMsg );
+        	    pkErrors.Pop;
+        	    raise_application_error( pkConstante.nuERROR_LEVEL2, sbErrMsg );
+        --}
+        END ClearMemory;
+
+        /* ***************************************************************** */
+
+    BEGIN
+    --{
+        pkErrors.Push('OS_BusinessObject.Functionality');
+
+        -- Ejecuta Servicio de negocio
+        pkBSBusinessObjectFunct.Functionality ( IOVar1,
+    					    IOVar2,
+    					    IOVarN,
+    					    onuErrorCode,
+    					    osbErrorMessage );
+
+        -- Evalua si se presento error en el servicio de negocio
+        if ( onuErrorCode <> 0 ) then
+        --{
+    	   -- Propaga el error
+    	   raise LOGIN_DENIED ;
+        --}
+        end if ;
+
+        pkErrors.Pop;
+
+    EXCEPTION
+        when LOGIN_DENIED or pkConstante.exERROR_LEVEL2 then
+        	-- Error de Aplicacion
+        	pkErrors.Pop;
+        	pkErrors.GetErrorVar( onuErrorCode, osbErrorMessage );
+        when others then
+        	-- Error no controlado
+        	pkErrors.NotifyError( pkErrors.fsbLastObject, sqlerrm, sbErrMsg );
+        	pkErrors.Pop;
+        	pkErrors.GetErrorVar( onuErrorCode, osbErrorMessage );
+    --}
+    END Functionality;
+
+
+
+--}
+END OS_BusinessObject;
+/
